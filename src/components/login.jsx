@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logo } from "../constants";
-import { loginUserStart } from "../slice/auth";
+import AuthService from "../service/auth";
+import {
+	signUserFailore,
+	signUserStart,
+	signUserSuccess,
+} from "../slice/auth";
 import { Input } from "../ui/index";
+import ValidationError from "./validation-error";
 
 const Login = () => {
 	const [email, setEmail] = useState("");
@@ -10,10 +16,19 @@ const Login = () => {
 	const { isLoading } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
 
-	const loginHandler = (e) => {
-		e.preventDefault();
-
-		dispatch(loginUserStart());
+	const loginHandler = async (e) => {
+        e.preventDefault();
+        
+		const user = { email, password };
+        dispatch(signUserStart());
+        
+		try {
+			const responce = await AuthService.userLogin(user);
+			dispatch(signUserSuccess(responce.user));            
+            console.log(responce);
+		} catch (error) {
+			dispatch(signUserFailore(error.response.data.errors));
+		}
 	};
 
 	return (
@@ -26,7 +41,9 @@ const Login = () => {
 					width="72"
 					height="57"
 				/>
-				<h1 className="h3 mb-3 fw-normal">Please Login</h1>
+                <h1 className="h3 mb-3 fw-normal">Please Login</h1>
+                
+                <ValidationError/>
 
 				<Input
 					label={"Email"}
@@ -46,7 +63,7 @@ const Login = () => {
 					className="w-100 btn btn-lg btn-primary mt-3"
 					disabled={isLoading}
 					type="submit">
-					{isLoading ? "loading..." : "login" }
+					{isLoading ? "loading..." : "login"}
 				</button>
 			</form>
 		</div>
