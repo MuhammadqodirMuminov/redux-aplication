@@ -1,35 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { logo } from "../constants";
 import AuthService from "../service/auth";
-import {
-	signUserFailore,
-	signUserStart,
-	signUserSuccess,
-} from "../slice/auth";
+import { signUserFailore, signUserStart, signUserSuccess } from "../slice/auth";
 import { Input } from "../ui/index";
 import ValidationError from "./validation-error";
 
 const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const { isLoading } = useSelector((state) => state.auth);
+	const { isLoading, loggedIn } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const loginHandler = async (e) => {
-        e.preventDefault();
-        
+		e.preventDefault();
+
 		const user = { email, password };
-        dispatch(signUserStart());
-        
+		dispatch(signUserStart());
+
 		try {
 			const responce = await AuthService.userLogin(user);
-			dispatch(signUserSuccess(responce.user));            
-            console.log(responce);
+			dispatch(signUserSuccess(responce.user));
+			navigate("/");
 		} catch (error) {
 			dispatch(signUserFailore(error.response.data.errors));
 		}
 	};
+
+	useEffect(() => {
+		if (loggedIn) {
+			navigate("/");
+		}
+	}, []);
 
 	return (
 		<div className="text-center w-25 mx-auto mt-5">
@@ -41,9 +45,9 @@ const Login = () => {
 					width="72"
 					height="57"
 				/>
-                <h1 className="h3 mb-3 fw-normal">Please Login</h1>
-                
-                <ValidationError/>
+				<h1 className="h3 mb-3 fw-normal">Please Login</h1>
+
+				<ValidationError />
 
 				<Input
 					label={"Email"}
