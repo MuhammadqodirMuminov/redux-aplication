@@ -5,6 +5,11 @@ const ArticleService = {
 		const responce = await axios.get("/articles");
 		return responce.data;
 	},
+
+	async getArticleDetail(slug) {
+		const responce = await axios.get(`/articles/${slug}`);
+		return responce.data;
+	},
 };
 
 export default ArticleService;

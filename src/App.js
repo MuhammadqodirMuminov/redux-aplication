@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import { Main, Login, Register, Navbar } from "./components";
+import { Main, Login, Register, Navbar, ArticleDetail } from "./components";
 import { getItem } from "./helpers/persistance-storage";
 import AuthService from "./service/auth";
 import { signUserSuccess } from "./slice/auth";
@@ -46,13 +46,17 @@ const App = () => {
 	return (
 		<div>
 			<Navbar />
-			<Routes>
-				<Route path="/" element={<Main />} />
+			<div className="container">
+				<Routes>
+					<Route path="/" element={<Main />} />
 
-				<Route path="/login" element={<Login />} />
+					<Route path="/login" element={<Login />} />
 
-				<Route path="/register" element={<Register />} />
-			</Routes>
+					<Route path="/register" element={<Register />} />
+
+					<Route path="/article/:id" element={<ArticleDetail />} />
+				</Routes>
+			</div>
 		</div>
 	);
 };
