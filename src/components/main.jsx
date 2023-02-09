@@ -1,10 +1,30 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ArticleService from "../service/articles";
+import { getArticleFailure, getArticlesSuccess, getArticleStart } from "../slice/article";
 import { Loader } from "../ui/index";
 
 const Main = () => {
 	const { articles, isLoading } = useSelector((state) => state.article);
-	const navigate = useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+	const getArticles = async () => {
+		dispatch(getArticleStart());
+
+		try {
+			const responce = await ArticleService.getArticles();
+
+			dispatch(getArticlesSuccess(responce.articles));
+		} catch (error) {
+			dispatch(getArticleFailure(error));
+		}
+	};
+
+	useEffect(() => {
+		getArticles();
+	}, []);
 
 	return (
 		<div>
@@ -28,7 +48,9 @@ const Main = () => {
 								<div className="card-footer d-flex justify-content-between align-items-center">
 									<div className="btn-group">
 										<button
-											onClick={() => navigate(`/article/${item.slug}`)}
+											onClick={() =>
+												navigate(`/article/${item.slug}`)
+											}
 											type="button"
 											className="btn btn-sm btn-outline-success">
 											View
