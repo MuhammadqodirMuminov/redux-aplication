@@ -18,8 +18,14 @@ const ArticleService = {
 	},
 
 	async deleteArticle(id) {
-        const responce = await axios.delete(`articles/${id}`);
-        
+		const responce = await axios.delete(`articles/${id}`);
+
+		return responce.data;
+	},
+
+	async editArticle(id, article) {
+		const responce = await axios.put(`articles/${id}`, { article });
+
 		return responce.data;
 	},
 };
