@@ -70,7 +70,7 @@ const ArticleDetail = () => {
 						</div>
 						<p>{articleDetail?.body}</p>
 						<p className="text-muted">
-							{" "}
+						
 							<span className="fw-bold">Created At:</span>{" "}
 							{moment(articleDetail?.createdAt).format("MMM DD, YYYY")}
 						</p>

@@ -30,8 +30,8 @@ const Main = () => {
 
 	const deleteHandler = async (id) => {
 		try {
-            await ArticleService.deleteArticle(id);
-            
+			await ArticleService.deleteArticle(id);
+
 			getArticles();
 		} catch (error) {
 			console.log(error);
@@ -75,6 +75,11 @@ const Main = () => {
 											user.username === item.author.username && (
 												<>
 													<button
+														onClick={() =>
+															navigate(
+																`/edit-article/${item.slug}`
+															)
+														}
 														type="button"
 														className="btn btn-sm btn-outline-secondary">
 														Edit

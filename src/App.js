@@ -1,11 +1,18 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import { Main, Login, Register, Navbar, ArticleDetail, CreateArticle } from "./components";
+import {
+	Main,
+	Login,
+	Register,
+	Navbar,
+	ArticleDetail,
+	CreateArticle,
+	EditArticle,
+} from "./components";
 import { getItem } from "./helpers/persistance-storage";
 import AuthService from "./service/auth";
 import { signUserSuccess } from "./slice/auth";
-
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -16,10 +23,8 @@ const App = () => {
 		dispatch(signUserSuccess(responce.user));
 	};
 
-
 	useEffect(() => {
 		const token = getItem("token");
-
 
 		if (token) {
 			getUser();
@@ -40,6 +45,8 @@ const App = () => {
 					<Route path="/article/:id" element={<ArticleDetail />} />
 
 					<Route path="/create-article" element={<CreateArticle />} />
+
+					<Route path="/edit-article/:id" element={<EditArticle />} />
 				</Routes>
 			</div>
 		</div>
