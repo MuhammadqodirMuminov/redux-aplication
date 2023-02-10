@@ -54,8 +54,7 @@ const ArticleDetail = () => {
 									</h3>
 
 									<p class="mb-auto">
-										This is a wider card with supporting text below as
-										a natural lead-in to additional content.
+										{articleDetail?.author.bio}
 									</p>
 								</div>
 								<div class="col-auto d-none d-lg-block">
@@ -70,7 +69,6 @@ const ArticleDetail = () => {
 						</div>
 						<p>{articleDetail?.body}</p>
 						<p className="text-muted">
-						
 							<span className="fw-bold">Created At:</span>{" "}
 							{moment(articleDetail?.createdAt).format("MMM DD, YYYY")}
 						</p>
