@@ -2,13 +2,19 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ArticleService from "../service/articles";
-import { getArticleFailure, getArticlesSuccess, getArticleStart } from "../slice/article";
+import {
+	getArticleFailure,
+	getArticlesSuccess,
+	getArticleStart,
+} from "../slice/article";
 import { Loader } from "../ui/index";
 
 const Main = () => {
 	const { articles, isLoading } = useSelector((state) => state.article);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+	const { user, loggedIn } = useSelector((state) => state.auth);
+
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const getArticles = async () => {
 		dispatch(getArticleStart());
@@ -19,6 +25,16 @@ const Main = () => {
 			dispatch(getArticlesSuccess(responce.articles));
 		} catch (error) {
 			dispatch(getArticleFailure(error));
+		}
+	};
+
+	const deleteHandler = async (id) => {
+		try {
+            await ArticleService.deleteArticle(id);
+            
+			getArticles();
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
@@ -55,16 +71,24 @@ const Main = () => {
 											className="btn btn-sm btn-outline-success">
 											View
 										</button>
-										<button
-											type="button"
-											className="btn btn-sm btn-outline-secondary">
-											Edit
-										</button>
-										<button
-											type="button"
-											className="btn btn-sm btn-outline-danger">
-											Delete
-										</button>
+										{loggedIn &&
+											user.username === item.author.username && (
+												<>
+													<button
+														type="button"
+														className="btn btn-sm btn-outline-secondary">
+														Edit
+													</button>
+													<button
+														onClick={() =>
+															deleteHandler(item.slug)
+														}
+														type="button"
+														className="btn btn-sm btn-outline-danger">
+														Delete
+													</button>
+												</>
+											)}
 									</div>
 									<small className="text-muted fw-bold">
 										{item.author.username}

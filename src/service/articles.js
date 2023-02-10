@@ -16,6 +16,12 @@ const ArticleService = {
 
 		return responce.data;
 	},
+
+	async deleteArticle(id) {
+        const responce = await axios.delete(`articles/${id}`);
+        
+		return responce.data;
+	},
 };
 
 export default ArticleService;
